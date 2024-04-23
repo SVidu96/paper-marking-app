@@ -13,7 +13,10 @@ if(isset($_COOKIE['user_id'])){
 
 <?php
 function getGrade($score){
-    if ($score >= 90) {
+    if($score == "Pending"){
+        return "N/A";
+    }
+    elseif ($score >= 90) {
         return 'A+';
     } elseif ($score >= 80) {
         return 'A';
@@ -77,13 +80,21 @@ function getGrade($score){
 
    if($totalGrades > 0){
       foreach($grades as $grade){
+
+        if(is_null($grade['total_score'])) {
+            $score =  "Pending";
+        }
+        else{
+            $score =  number_format($grade['total_score'], 2);
+        }
+
          ?>
          <div class="Questionpaper">
             <p>Student Number: <span><?php echo $grade['studentNo']; ?></span></p>
             <p>Student Name: <span><?php echo $grade['name']; ?></span></p>
             <p>Exam Title: <span><?php echo $grade['title']; ?></span></p>
-            <p>Total Score: <span><?php echo number_format($grade['total_score'], 2); ?></span></p>
-            <p>Grade: <span><?php echo getGrade($grade['total_score']); ?></span></p>
+            <p>Total Score: <span><?php echo $score ?></span></p>
+            <p>Grade: <span><?php echo getGrade($score); ?></span></p>
          </div>
          <?php
       }
