@@ -1,7 +1,6 @@
 # main.py
 from database import connect_to_db, load_questions_and_answers, update_score
-#from similarity import calculate_similarity_sbert
-from similarityv2 import calculate_similarity_hf
+from similarity import calculate_similarity_distilroberta
 import time
 
 def main():
@@ -20,8 +19,8 @@ def main():
             question_id, user_question, user_answer = row
             teacher_answer = question_answers.get(user_question)
             if teacher_answer:
-                print("\n[Get] Question Id                :",question_id)
-                similarity_score = calculate_similarity_hf(teacher_answer, user_answer)
+                print("\n[Get] Question Id              :",question_id)
+                similarity_score = calculate_similarity_distilroberta(teacher_answer, user_answer)
                 print("[Processing done] Question Id    :",question_id)
                 update_score(connection, question_id, similarity_score)
                 print("[Score updated] Question Id      :",question_id)

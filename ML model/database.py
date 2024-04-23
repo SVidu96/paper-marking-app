@@ -2,11 +2,11 @@
 import pymysql
 
 def connect_to_db():
-    db_name = 'mysql:host=localhost:3308;dbname=course_db'
+    # db_name = 'mysql:host=localhost:3308;dbname=course_db'
     user_name = 'root'
     user_password = ''
     connection = pymysql.connect(host='localhost',
-                                 port=3306,
+                                 port=3308,
                                  user=user_name,
                                  password=user_password,
                                  db='course_db')
