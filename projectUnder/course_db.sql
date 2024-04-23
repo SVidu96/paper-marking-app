@@ -144,6 +144,7 @@ CREATE TABLE IF NOT EXISTS `user_answers` (
   `question_number` int(11) DEFAULT NULL,
   `question` varchar(255) NOT NULL,
   `answer` text,
+  `score` float DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
