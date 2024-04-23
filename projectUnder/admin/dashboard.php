@@ -18,6 +18,12 @@ if (isset($_COOKIE['tutor_id'])) {
     $stmtUsers = $conn->prepare("SELECT COUNT(*) as total_users FROM users");
     $stmtUsers->execute();
     $totalUsers = $stmtUsers->fetch(PDO::FETCH_ASSOC)['total_users'];
+
+    // Fetch total exams
+    $stmtSubmissions = $conn->prepare("SELECT COUNT(*) AS number_of_groups FROM ( SELECT user_id, exam_id FROM user_answers GROUP BY user_id, exam_id ) AS grouped_data;");
+    $stmtSubmissions->execute();
+    $totalSubmissions = $stmtSubmissions->fetch(PDO::FETCH_ASSOC)['number_of_groups'];
+
 } else {
     $tutor_id = '';
     header('location:login.php');
@@ -69,7 +75,7 @@ if (isset($_COOKIE['tutor_id'])) {
       </div>
 
       <div class="box">
-         <h3>0</h3>
+         <h3><?php echo $totalSubmissions; ?></h3>
          <p>Total Submissions</p> 
          <a href="grades.php" class="btn">View Grades</a>
       </div>

@@ -1,12 +1,19 @@
 <?php
 
-include 'components/connect.php';
+include '../components/connect.php';
 
-if(isset($_COOKIE['user_id'])){
-   $user_id = $_COOKIE['user_id'];
+if(isset($_COOKIE['tutor_id'])){
+   $tutor_id = $_COOKIE['tutor_id'];
 }else{
-   $user_id = '';
+   $tutor_id = '';
    header('location:login.php');
+}
+
+if (isset($_GET['exam_id'])) {
+    $exam_id = $_GET['exam_id'];
+} else {
+    header('location:grades.php');
+   exit();
 }
 
 ?>
@@ -53,12 +60,12 @@ function getGrade($score){
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
    <!-- custom css file link  -->
-   <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="../css/admin_style.css">
 
 </head>
 <body>
 
-<?php include 'components/user_header.php'; ?>
+<?php include '../components/admin_header.php'; ?>
 
 <!-- teachers section starts  -->
 
@@ -70,18 +77,18 @@ function getGrade($score){
       <button type="submit" name="search_tutor_btn" class="fas fa-search"></button>
    </form>
    <?php
-   $stmtGrades = $conn->prepare("SELECT u.studentNo, u.name,e.title, ua.user_id, ua.exam_id, AVG(ua.score) as total_score FROM user_answers ua JOIN exams e ON ua.exam_id = e.exam_id JOIN users u ON ua.user_id = u.id AND user_id = ? GROUP BY user_id,exam_id;");
-   $stmtGrades->execute([$user_id]);
+   $stmtGrades = $conn->prepare("SELECT u.studentNo, u.name,e.title, ua.user_id, ua.exam_id, AVG(ua.score) as total_score FROM user_answers ua JOIN exams e ON ua.exam_id = e.exam_id JOIN users u ON ua.user_id = u.id AND ua.exam_id = ? GROUP BY user_id,exam_id;");
+   $stmtGrades->execute([$exam_id]);
    $totalGrades = $stmtGrades->rowCount();
    $grades = $stmtGrades->fetchAll(PDO::FETCH_ASSOC);
 
    if($totalGrades > 0){
+    echo "<h1>Exam : <span>" . $grades[0]['title'] . "</span></h1>";
       foreach($grades as $grade){
          ?>
          <div class="Questionpaper">
             <p>Student Number: <span><?php echo $grade['studentNo']; ?></span></p>
             <p>Student Name: <span><?php echo $grade['name']; ?></span></p>
-            <p>Exam Title: <span><?php echo $grade['title']; ?></span></p>
             <p>Total Score: <span><?php echo number_format($grade['total_score'], 2); ?></span></p>
             <p>Grade: <span><?php echo getGrade($grade['total_score']); ?></span></p>
          </div>
@@ -93,12 +100,9 @@ function getGrade($score){
    ?>
 </section>
 
-<!-- teachers section ends -->
+<?php include '../components/footer.php'; ?>
 
-<?php include 'components/footer.php'; ?>    
-
-<!-- custom js file link  -->
-<script src="js/script.js"></script>
+<script src="../js/admin_script.js"></script>
    
 </body>
 </html>
