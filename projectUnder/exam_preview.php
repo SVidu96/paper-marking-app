@@ -7,7 +7,13 @@ if(isset($_COOKIE['user_id'])){
 }else{
    $user_id = '';
    header('location:login.php');
-   exit();
+   exit;
+}
+if (isset($_POST['viewexam'])) {
+    $exam_id = $_POST['exam_id'];
+    $user_id = $_POST['user_id'];
+    header("Location: exam_results.php?exam_id=$exam_id&user_id=$user_id");
+    exit; 
 }
 
 ?>
@@ -97,6 +103,10 @@ textarea[readonly] {
    font-size: 13px;
 }
 
+.viewexambtn{
+    margin-left:0px !important;
+}
+
 </style>
 
 </head>
@@ -106,64 +116,31 @@ textarea[readonly] {
 
 <!-- Question Papers section starts  -->
 <section class="dashboard">
-    <?php
-    // Fetch exam title, description, and time from the exam table
-    $stmtExams = $conn->prepare("SELECT exam_id, title, description, time FROM exams WHERE exam_id IN (SELECT DISTINCT exam_id FROM user_answers WHERE user_id = ?)");
+    <h1 class="heading">Exams Preview</h1>
+    <section class="exam-container">
+        <?php 
+    $stmtExams = $conn->prepare("SELECT e.title, e.exam_id,ua.user_id, ua.created_at FROM exams e JOIN user_answers ua ON e.exam_id = ua.exam_id AND ua.user_id = ? GROUP BY ua.exam_id, ua.user_id ORDER BY ua.created_at DESC;");
     $stmtExams->execute([$user_id]);
     $exams = $stmtExams->fetchAll(PDO::FETCH_ASSOC);
-
-    // Display each exam paper separately
-    foreach ($exams as $exam) {
-        echo "<div class='papers-container'>";
-        echo "<div class='exam-info'>";
-        echo "<h2>{$exam['title']}</h2>";
-        echo "<p>{$exam['description']}</p>";
-        echo "<p>{$exam['time']}</p>";
-        echo "<hr style=\"height:1px;border-width:0;color:gray;background-color:gray\">";
-        echo "</div>";
-        
-
-        // Fetch questions and answers for the current exam
-        $stmtQuestionPapers = $conn->prepare("SELECT qa.question_number, qa.question, ua.answer FROM question_papers qa LEFT JOIN user_answers ua ON qa.exam_id = ua.exam_id AND qa.question_number = ua.question_number WHERE ua.user_id = ? AND qa.exam_id = ?");
-        $stmtQuestionPapers->execute([$user_id, $exam['exam_id']]);
-        $questionPapers = $stmtQuestionPapers->fetchAll(PDO::FETCH_ASSOC);
-
-        // Check if there are any question papers available for this exam
-        if (count($questionPapers) > 0) {
-            foreach ($questionPapers as $paper) {
-                echo "<div class='question-paper'>";
-                echo "<hr>";
-                echo "<div class='question-answer'>";
-
-                // Display the question number
-                echo "<div class='question'>";
-                echo "<p class='paper-heading'>Question:</p>";
-                echo "<p class='paper-text'>{$paper['question']}</p>";
-                echo "</div>";
-
-                // Display the answer in a textarea
-                echo "<div class='answer'>";
-                echo "<p class='paper-heading'>Your Answer:</p>";
-                $answer = isset($paper['answer']) ? $paper['answer'] : "Not answered yet";
-                echo "<textarea class='paper-text' readonly>{$answer}</textarea>";
-                echo "</div>";
-
-                echo "</div>"; // Closing div for question-answer
-                echo "</div>"; // Closing div for question-paper
-            }
-        } else {
-            echo "<h3>You didn't submit the paper yet!!!</h3>";
-        }
-        
-
-        echo "</div>"; // Closing div for papers-container
+    if(empty($exams)) {
+    echo "<div class='Questionpaper'><p class='head'>No Exams Found</p></div>";
     }
+    foreach ($exams as $exam) :
+        ?>
+        <div class="Questionpaper">
+            <p class="head"><?php echo "{$exam['title']}"; ?></p>
+            <p>Submitted on : <?php echo "{$exam['created_at']}"; ?></p>
+            <form action="" method="post" class="exam-password-form">
+                            <input type="hidden" name="exam_id" value="<?php echo $exam['exam_id']; ?>">
+                            <input type="hidden" name="user_id" value="<?php echo $exam['user_id']; ?>">
+                            <button type="submit" name="viewexam" class="viewexambtn">View Exam</button>
+            </form>
+        </div>
+        <?php endforeach; ?>
+
     
-    ?>
+    </section>
 </section>
-<br><br><br>
-
-
 <?php include 'components/footer.php'; ?>
 
 <!-- custom js file link  -->
