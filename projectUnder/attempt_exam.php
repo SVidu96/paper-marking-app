@@ -3,7 +3,7 @@ date_default_timezone_set('Asia/Colombo'); // Set the timezone to Sri Lanka
 
 include 'components/connect.php';
 
-if(isset($_COOKIE['user_id'])){
+if (isset($_COOKIE['user_id'])) {
     $user_id = $_COOKIE['user_id'];
 } else {
     $user_id = '';
@@ -12,7 +12,7 @@ if(isset($_COOKIE['user_id'])){
 }
 
 // Check if exam_id is set in the URL
-if(isset($_GET['exam_id'])) {
+if (isset($_GET['exam_id'])) {
     $exam_id = $_GET['exam_id'];
 
     // Fetch exam details
@@ -89,7 +89,7 @@ $submitted_datetime = date('Y-m-d H:i:s'); // Get the current date and time when
 
     <!-- custom css file link  -->
     <link rel="stylesheet" href="css/style.css">
-    
+
 </head>
 
 <body>
@@ -99,7 +99,8 @@ $submitted_datetime = date('Y-m-d H:i:s'); // Get the current date and time when
     <section class="dashboard">
         <h1 class="heading"><?= $exam['title']; ?> - Exam Paper</h1>
 
-        <form id="examForm" action="" method="post" class="questionpaper" <?php if ($submitted) echo 'style="display: none;"'; ?>>
+        <form id="examForm" action="" method="post" class="questionpaper" <?php if ($submitted)
+            echo 'style="display: none;"'; ?>>
             <input type="hidden" name="exam_id" value="<?= $exam_id; ?>">
             <p class="exam-description"><?= $exam['description']; ?></p>
             <p class="exam-time">Time: <?= $exam['time']; ?></p>
@@ -110,7 +111,8 @@ $submitted_datetime = date('Y-m-d H:i:s'); // Get the current date and time when
                 <div class="question-container">
                     <p class="question">Question <?php echo $question['question_number']; ?>:</p>
                     <p class="question"><?= $question['question']; ?></p>
-                    <textarea name="answer_<?= $question['question_number']; ?>" class="box" rows="2" cols="50" maxlength="400" placeholder="Your Answer" required></textarea><br><br>
+                    <textarea name="answer_<?= $question['question_number']; ?>" class="box" rows="2" cols="50"
+                        maxlength="400" placeholder="Your Answer" required></textarea><br><br>
                 </div>
             <?php endforeach; ?>
             <br><br>

@@ -50,7 +50,7 @@ $questions = $stmtQuestions->fetchAll(PDO::FETCH_ASSOC);
 // Handle delete request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     $deleteQuestionId = $_POST['delete'];
-    
+
     // Fetch the question number of the question to be deleted
     $stmtDelete = $conn->prepare("SELECT question_number FROM question_papers WHERE id = ?");
     $stmtDelete->execute([$deleteQuestionId]);
@@ -129,89 +129,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_submit'])) {
             <form action="" method="post" enctype="multipart/form-data" class="paper">
                 <p> Add Question</p>
                 <input type="text" name="question" class="box" placeholder="Question" maxlength="255" required><br><br>
-                <textarea name="answer" class="box" rows="2" cols="50" maxlength="400" placeholder="Answer" required></textarea><br><br><br>
+                <textarea name="answer" class="box" rows="2" cols="50" maxlength="400" placeholder="Answer"
+                    required></textarea><br><br><br>
                 <input type="submit" name="submit" value="Add Question" class="btn"><br>
             </form>
         </section>
-        
+
 
         <section id="updateQuestionForm" class="form-container" style="display: none;">
-    <button class="closebtn" onclick="toggleUpdateForm()">Close <i class="fas fa-times"></i></button>
-    <form action="" method="post" enctype="multipart/form-data" class="paper" id="updateForm">
-        <p id="updateFormTitle">Update Question </p>
-        <input type="hidden" id="updateQuestionId" name="update_question_id" value="">
-        <textarea id="updateQuestion" name="update_question" class="box" rows="2" cols="50" maxlength="400" placeholder="Update Question" required></textarea><br><br>
-        <textarea id="updateAnswer" name="update_answer" class="box" rows="2" cols="50" maxlength="400" placeholder="Update Answer" required></textarea><br><br><br>
-        <input type="submit" name="update_submit" value="Update Question" class="btn"><br>
-    </form>
-</section>
+            <button class="closebtn" onclick="toggleUpdateForm()">Close <i class="fas fa-times"></i></button>
+            <form action="" method="post" enctype="multipart/form-data" class="paper" id="updateForm">
+                <p id="updateFormTitle">Update Question </p>
+                <input type="hidden" id="updateQuestionId" name="update_question_id" value="">
+                <textarea id="updateQuestion" name="update_question" class="box" rows="2" cols="50" maxlength="400"
+                    placeholder="Update Question" required></textarea><br><br>
+                <textarea id="updateAnswer" name="update_answer" class="box" rows="2" cols="50" maxlength="400"
+                    placeholder="Update Answer" required></textarea><br><br><br>
+                <input type="submit" name="update_submit" value="Update Question" class="btn"><br>
+            </form>
+        </section>
 
 
-<section class="papers-container">
-    <?php
-    foreach ($questions as $q): ?>
-        <div class="Questionpaper">
-            <p class="head">Question <?php echo $q['question_number']; ?></p>
-            <p><?php echo $q['question']; ?></p>
-            <p class="head">Answer</p>
-            <p><?php echo $q['answer']; ?></p>
-            <div class="buttons-container">
-                <button class="update" onclick="toggleUpdateForm(<?php echo $q['id']; ?>, '<?php echo $q['question']; ?>', '<?php echo $q['answer']; ?>')">Update</button>
-                <!-- Add a form for the delete button -->
-                <form method="post" onsubmit="return confirm('Are you sure you want to delete this question?')">
-                    <input type="hidden" name="delete" value="<?php echo $q['id']; ?>">
-                    <button class="delete" type="submit">Delete</button>
-                </form>
-            </div>
-        </div>
-    <?php endforeach; ?>
-</section>
-<br><br><br><br><br>
+        <section class="papers-container">
+            <?php
+            foreach ($questions as $q): ?>
+                <div class="Questionpaper">
+                    <p class="head">Question <?php echo $q['question_number']; ?></p>
+                    <p><?php echo $q['question']; ?></p>
+                    <p class="head">Answer</p>
+                    <p><?php echo $q['answer']; ?></p>
+                    <div class="buttons-container">
+                        <button class="update"
+                            onclick="toggleUpdateForm(<?php echo $q['id']; ?>, '<?php echo $q['question']; ?>', '<?php echo $q['answer']; ?>')">Update</button>
+                        <!-- Add a form for the delete button -->
+                        <form method="post" onsubmit="return confirm('Are you sure you want to delete this question?')">
+                            <input type="hidden" name="delete" value="<?php echo $q['id']; ?>">
+                            <button class="delete" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </section>
+        <br><br><br><br><br>
 
-</section>
+    </section>
 
-<?php include '../components/footer.php'; ?>
+    <?php include '../components/footer.php'; ?>
 
-<script src="../js/admin_script.js"></script>
+    <script src="../js/admin_script.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var successMessage = document.querySelector('.success-message');
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successMessage = document.querySelector('.success-message');
 
-        if (successMessage) {
-            setTimeout(function () {
-                successMessage.style.display = "none";
-            }, 3000);
+            if (successMessage) {
+                setTimeout(function () {
+                    successMessage.style.display = "none";
+                }, 3000);
+            }
+        });
+
+        function toggleForm(formId) {
+            var body = document.body;
+            var overlay = document.getElementById('overlay');
+            var form = document.getElementById(formId);
+
+            body.classList.toggle('overlayed');
+            overlay.style.display = (overlay.style.display === 'none' || overlay.style.display === '') ? 'block' : 'none';
+            form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
         }
-    });
 
-    function toggleForm(formId) {
-        var body = document.body;
-        var overlay = document.getElementById('overlay');
-        var form = document.getElementById(formId);
+        function toggleQuestionForm() {
+            toggleForm('addQuestionForm');
+        }
 
-        body.classList.toggle('overlayed');
-        overlay.style.display = (overlay.style.display === 'none' || overlay.style.display === '') ? 'block' : 'none';
-        form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
-    }
+        function toggleUpdateForm(questionId, question, answer) {
+            var updateForm = document.getElementById('updateForm');
+            var updateQuestionId = document.getElementById('updateQuestionId');
+            var updateQuestion = document.getElementById('updateQuestion');
+            var updateAnswer = document.getElementById('updateAnswer');
 
-    function toggleQuestionForm() {
-        toggleForm('addQuestionForm');
-    }
+            updateQuestionId.value = questionId;
+            updateQuestion.value = question;
+            updateAnswer.value = answer;
 
-    function toggleUpdateForm(questionId, question, answer) {
-        var updateForm = document.getElementById('updateForm');
-        var updateQuestionId = document.getElementById('updateQuestionId');
-        var updateQuestion = document.getElementById('updateQuestion');
-        var updateAnswer = document.getElementById('updateAnswer');
-
-        updateQuestionId.value = questionId;
-        updateQuestion.value = question;
-        updateAnswer.value = answer;
-
-        toggleForm('updateQuestionForm');
-    }
-</script>
+            toggleForm('updateQuestionForm');
+        }
+    </script>
 
 </body>
 

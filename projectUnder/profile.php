@@ -1,7 +1,7 @@
 <?php
 include 'components/connect.php';
 
-if(isset($_COOKIE['user_id'])){
+if (isset($_COOKIE['user_id'])) {
    $user_id = $_COOKIE['user_id'];
 } else {
    header('location:login.php');
@@ -13,8 +13,8 @@ $select_profile->execute([$user_id]);
 $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
 
 // Check if the user exists
-if(!$fetch_profile) {
-    header('location:login.php');
+if (!$fetch_profile) {
+   header('location:login.php');
 }
 
 // Fetch additional information like likes, comments, and bookmarks if needed
@@ -33,6 +33,7 @@ $total_bookmarked = $select_bookmark->rowCount();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,42 +47,44 @@ $total_bookmarked = $select_bookmark->rowCount();
    <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 <body>
 
-<?php include 'components/user_header.php'; ?>
+   <?php include 'components/user_header.php'; ?>
 
-<section class="profile">
+   <section class="profile">
 
-   <h1 class="heading">Profile Details</h1>
+      <h1 class="heading">Profile Details</h1>
 
-   <div class="details">
+      <div class="details">
 
-      <div class="user">
-         <img src="uploaded_files/<?= $fetch_profile['image']; ?>" alt="User Image">
-         <h3><?= $fetch_profile['name']; ?></h3>
-         <a href="update.php" class="inline-btn">Update Profile</a>
-         <h3>Email: <?= $fetch_profile['email']; ?></h3>
-         <h3>Country: <?= $fetch_profile['studentNo']; ?></h3>
-         <h3>City: <?= $fetch_profile['year']; ?></h3>
+         <div class="user">
+            <img src="uploaded_files/<?= $fetch_profile['image']; ?>" alt="User Image">
+            <h3><?= $fetch_profile['name']; ?></h3>
+            <a href="update.php" class="inline-btn">Update Profile</a>
+            <h3>Email: <?= $fetch_profile['email']; ?></h3>
+            <h3>Country: <?= $fetch_profile['studentNo']; ?></h3>
+            <h3>City: <?= $fetch_profile['year']; ?></h3>
+
+         </div>
 
       </div>
 
-   </div>
+   </section>
 
-</section>
+   <!-- footer section starts  -->
 
-<!-- footer section starts  -->
+   <footer class="footer">
 
-<footer class="footer">
+      &copy; copyright @ 2022 by <span>mr. Rashmika Palamandadige</span> | all rights reserved!
 
-   &copy; copyright @ 2022 by <span>mr. Rashmika Palamandadige</span> | all rights reserved!
+   </footer>
 
-</footer>
+   <!-- footer section ends -->
 
-<!-- footer section ends -->
+   <!-- custom js file link  -->
+   <script src="js/script.js"></script>
 
-<!-- custom js file link  -->
-<script src="js/script.js"></script>
-   
 </body>
+
 </html>

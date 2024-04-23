@@ -2,7 +2,7 @@
 ob_start();
 include '../components/connect.php';
 
-if(isset($_COOKIE['tutor_id'])) {
+if (isset($_COOKIE['tutor_id'])) {
    $tutor_id = $_COOKIE['tutor_id'];
 } else {
    $tutor_id = '';
@@ -10,7 +10,7 @@ if(isset($_COOKIE['tutor_id'])) {
    exit();
 }
 
-if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
    $title = $_POST['title'];
    $time = $_POST['time'];
    $description = $_POST['description'];
@@ -26,6 +26,7 @@ if(isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,54 +40,57 @@ if(isset($_POST['submit'])) {
    <link rel="stylesheet" href="../css/admin_style.css">
 
 </head>
+
 <body>
 
-<?php include '../components/admin_header.php'; ?>
-   
-<section class="video-form">
+   <?php include '../components/admin_header.php'; ?>
 
-   <h1 class="heading">Add Exams</h1>
+   <section class="video-form">
 
-   <?php if (isset($success_message)): ?>
-       <div class="success-message" id="successMessage"><?php echo $success_message; ?></div>
-   <?php endif; ?><br>
+      <h1 class="heading">Add Exams</h1>
 
-   <form action="" method="post" enctype="multipart/form-data">
-      <p>Exam Title <span>*</span></p>
-      <input type="text" name="title" maxlength="100" required placeholder="Enter exam title" class="box">
-      <p>Exam Time Limit <span>*</span></p>
-      <select name="time" class="box" required>
-         <option value="" selected disabled>-- select time</option>
-         <option value="1 hour">1 hour</option>
-         <option value="2 hour">2 hour</option>
-         <option value="3 hour">3 hour</option>
-      </select>
-      <p>Exam Password <span>*</span></p> <!-- New input field for exam password -->
-      <input type="password" name="password" required placeholder="Enter exam password" class="box">
-      <p>Description <span>*</span></p>
-      <textarea name="description" class="box" required placeholder="Input exam description" maxlength="1000" cols="30" rows="4"></textarea>
-      <input type="submit" name="submit" value="Submit" class="btn"><br>
-   </form>
+      <?php if (isset($success_message)): ?>
+         <div class="success-message" id="successMessage"><?php echo $success_message; ?></div>
+      <?php endif; ?><br>
 
-</section>
-<br><br><br><br><br><br>
+      <form action="" method="post" enctype="multipart/form-data">
+         <p>Exam Title <span>*</span></p>
+         <input type="text" name="title" maxlength="100" required placeholder="Enter exam title" class="box">
+         <p>Exam Time Limit <span>*</span></p>
+         <select name="time" class="box" required>
+            <option value="" selected disabled>-- select time</option>
+            <option value="1 hour">1 hour</option>
+            <option value="2 hour">2 hour</option>
+            <option value="3 hour">3 hour</option>
+         </select>
+         <p>Exam Password <span>*</span></p> <!-- New input field for exam password -->
+         <input type="password" name="password" required placeholder="Enter exam password" class="box">
+         <p>Description <span>*</span></p>
+         <textarea name="description" class="box" required placeholder="Input exam description" maxlength="1000"
+            cols="30" rows="4"></textarea>
+         <input type="submit" name="submit" value="Submit" class="btn"><br>
+      </form>
 
-<?php include '../components/footer.php'; ?>
+   </section>
+   <br><br><br><br><br><br>
 
-<script src="../js/admin_script.js"></script>
+   <?php include '../components/footer.php'; ?>
 
-<script>
-    // Add JavaScript code to hide success message after 3 seconds
-    document.addEventListener("DOMContentLoaded", function () {
-        var successMessage = document.getElementById('successMessage');
+   <script src="../js/admin_script.js"></script>
 
-        if (successMessage) {
+   <script>
+      // Add JavaScript code to hide success message after 3 seconds
+      document.addEventListener("DOMContentLoaded", function () {
+         var successMessage = document.getElementById('successMessage');
+
+         if (successMessage) {
             setTimeout(function () {
-                successMessage.style.display = "none";
+               successMessage.style.display = "none";
             }, 2000);
-        }
-    });
-</script>
+         }
+      });
+   </script>
 
 </body>
+
 </html>

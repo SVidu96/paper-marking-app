@@ -2,13 +2,13 @@
 
 include 'components/connect.php';
 
-if(isset($_COOKIE['user_id'])){
+if (isset($_COOKIE['user_id'])) {
    $user_id = $_COOKIE['user_id'];
-}else{
+} else {
    $user_id = '';
 }
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
    $id = unique_id();
    $name = $_POST['name'];
@@ -27,30 +27,30 @@ if(isset($_POST['submit'])){
    $image = $_FILES['image']['name'];
    $image = filter_var($image, FILTER_SANITIZE_STRING);
    $ext = pathinfo($image, PATHINFO_EXTENSION);
-   $rename = unique_id().'.'.$ext;
+   $rename = unique_id() . '.' . $ext;
    $image_size = $_FILES['image']['size'];
    $image_tmp_name = $_FILES['image']['tmp_name'];
-   $image_folder = 'uploaded_files/'.$rename;
+   $image_folder = 'uploaded_files/' . $rename;
 
    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
    $select_user->execute([$email]);
-   
-   if($select_user->rowCount() > 0){
+
+   if ($select_user->rowCount() > 0) {
       $message[] = 'email already taken!';
-   }else{
-      if($pass != $cpass){
+   } else {
+      if ($pass != $cpass) {
          $message[] = 'confirm passowrd not matched!';
-      }else{
+      } else {
          $insert_user = $conn->prepare("INSERT INTO `users`(id, name, email, password, studentNo, year, image) VALUES(?,?,?,?,?,?,?)");
          $insert_user->execute([$id, $name, $email, $cpass, $studentNo, $year, $rename]);
          move_uploaded_file($image_tmp_name, $image_folder);
-         
+
          $verify_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ? LIMIT 1");
          $verify_user->execute([$email, $pass]);
          $row = $verify_user->fetch(PDO::FETCH_ASSOC);
-         
-         if($verify_user->rowCount() > 0){
-            setcookie('user_id', $row['id'], time() + 60*60*24*30, '/');
+
+         if ($verify_user->rowCount() > 0) {
+            setcookie('user_id', $row['id'], time() + 60 * 60 * 24 * 30, '/');
             header('location:login.php');
          }
       }
@@ -62,6 +62,7 @@ if(isset($_POST['submit'])){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -74,65 +75,58 @@ if(isset($_POST['submit'])){
    <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 <body>
 
-<?php include 'components/home_header.php'; ?>
+   <?php include 'components/home_header.php'; ?>
 
-<section class="form-container">
+   <section class="form-container">
 
-   <form class="register" action="" method="post" enctype="multipart/form-data">
-      <h3>create account</h3>
-      <?php
-      if(isset($message)){
-      foreach($message as $message){
-         echo '
+      <form class="register" action="" method="post" enctype="multipart/form-data">
+         <h3>create account</h3>
+         <?php
+         if (isset($message)) {
+            foreach ($message as $message) {
+               echo '
          <div class="message form">
-            <span>'.$message.'</span>
+            <span>' . $message . '</span>
          </div>
             ';
-          }
+            }
          }
-      ?>
-      <div class="flex">
-         <div class="col">
-            <p>your name <span>*</span></p>
-            <input type="text" name="name" placeholder="eneter your name" maxlength="50" required class="box">
-            <p>your email <span>*</span></p>
-            <input type="email" name="email" placeholder="enter your email" maxlength="20" required class="box">
-            <p>Student Numnber <span>*</span></p>
-            <input type="text" name="studentNo" placeholder="enter your student number" maxlength="20" required class="box">
+         ?>
+         <div class="flex">
+            <div class="col">
+               <p>your name <span>*</span></p>
+               <input type="text" name="name" placeholder="eneter your name" maxlength="50" required class="box">
+               <p>your email <span>*</span></p>
+               <input type="email" name="email" placeholder="enter your email" maxlength="20" required class="box">
+               <p>Student Numnber <span>*</span></p>
+               <input type="text" name="studentNo" placeholder="enter your student number" maxlength="20" required
+                  class="box">
+            </div>
+            <div class="col">
+               <p>your password <span>*</span></p>
+               <input type="password" name="pass" placeholder="enter your password" maxlength="20" required class="box">
+               <p>confirm password <span>*</span></p>
+               <input type="password" name="cpass" placeholder="confirm your password" maxlength="20" required
+                  class="box">
+               <p>Year <span>*</span></p>
+               <input type="text" name="year" placeholder="enter your year" maxlength="20" required class="box">
+            </div>
          </div>
-         <div class="col">
-            <p>your password <span>*</span></p>
-            <input type="password" name="pass" placeholder="enter your password" maxlength="20" required class="box">
-            <p>confirm password <span>*</span></p>
-            <input type="password" name="cpass" placeholder="confirm your password" maxlength="20" required class="box">
-            <p>Year <span>*</span></p>
-            <input type="text" name="year" placeholder="enter your year" maxlength="20" required class="box">
-         </div>
-      </div>
-      <p>select pic <span>*</span></p>
-      <input type="file" name="image" accept="image/*" required class="box">
-      <p class="link">already have an account? <a href="login.php">login now</a></p>
-      <input type="submit" name="submit" value="register now" class="btn">
-   </form>
+         <p>select pic <span>*</span></p>
+         <input type="file" name="image" accept="image/*" required class="box">
+         <p class="link">already have an account? <a href="login.php">login now</a></p>
+         <input type="submit" name="submit" value="register now" class="btn">
+      </form>
 
-</section>
+   </section>
 
+   <?php include 'components/footer.php'; ?>
 
+   <script src="js/script.js"></script>
 
-
-
-
-
-
-
-
-
-
-<?php include 'components/footer.php'; ?>
-
-<script src="js/script.js"></script>
-   
 </body>
+
 </html>

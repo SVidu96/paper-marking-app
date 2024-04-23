@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,56 +48,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     <!-- custom css file link  -->
     <link rel="stylesheet" href="../css/admin_style.css">
 </head>
+
 <body>
 
-<?php include '../components/admin_header.php'; ?>
+    <?php include '../components/admin_header.php'; ?>
 
-<section class="dashboard">
-    <h1 class="heading">Manage Exams</h1>
+    <section class="dashboard">
+        <h1 class="heading">Manage Exams</h1>
 
-    <section class="managetbl">
-    <?php if (!empty($exams)): ?>
-        <div class="table">
-            <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableList">
-                <thead>
-                    <tr>
-                        <th class="text-left pl-4">Exam Title</th>
-                        <th class="text-left">Time</th>
-                        <th class="text-left">Description</th>  
-                        <th colspan="2" class="text-center" width="20%">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($exams as $exam): ?>
-                        <tr>
-                            <td class="pl-4"><?php echo $exam['title']; ?></td>
-                            <td><?php echo $exam['time']; ?></td>
-                            <td><?php echo $exam['description']; ?></td>
-                            <td>
-                                <a href="examquestions.php?tutor_id=<?php echo $tutor_id; ?>&exam_id=<?php echo $exam['exam_id']; ?>" class="btn btn-info">Manage</a>
-                            </td>
-                            <td>
-                                <form action="" method="post" onsubmit="return confirm('Are you sure you want to delete this exam and its questions?')">
-                                    <input type="hidden" name="exam_id" value="<?php echo $exam['exam_id']; ?>">
-                                    <input type="submit" name="delete" class="btn btn-danger ml-2" value="Delete">
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php else: ?>
-        <div class="exam_container">
-        <p>No exams available at the moment.</p>
-        </div>
-    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+        <section class="managetbl">
+            <?php if (!empty($exams)): ?>
+                <div class="table">
+                    <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableList">
+                        <thead>
+                            <tr>
+                                <th class="text-left pl-4">Exam Title</th>
+                                <th class="text-left">Time</th>
+                                <th class="text-left">Description</th>
+                                <th colspan="2" class="text-center" width="20%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($exams as $exam): ?>
+                                <tr>
+                                    <td class="pl-4"><?php echo $exam['title']; ?></td>
+                                    <td><?php echo $exam['time']; ?></td>
+                                    <td><?php echo $exam['description']; ?></td>
+                                    <td>
+                                        <a href="examquestions.php?tutor_id=<?php echo $tutor_id; ?>&exam_id=<?php echo $exam['exam_id']; ?>"
+                                            class="btn btn-info">Manage</a>
+                                    </td>
+                                    <td>
+                                        <form action="" method="post"
+                                            onsubmit="return confirm('Are you sure you want to delete this exam and its questions?')">
+                                            <input type="hidden" name="exam_id" value="<?php echo $exam['exam_id']; ?>">
+                                            <input type="submit" name="delete" class="btn btn-danger ml-2" value="Delete">
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="exam_container">
+                                <p>No exams available at the moment.</p>
+                            </div>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </section>
-</section>
 
-<?php include '../components/footer.php'; ?>
+    <?php include '../components/footer.php'; ?>
 
-<script src="../js/admin_script.js"></script>
+    <script src="../js/admin_script.js"></script>
 
 </body>
+
 </html>

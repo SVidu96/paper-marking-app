@@ -2,10 +2,10 @@
 
 include 'components/connect.php';
 
-if(isset($_COOKIE['user_id'])){
+if (isset($_COOKIE['user_id'])) {
    $user_id = $_COOKIE['user_id'];
    header('location:home.php');
-}else{
+} else {
    $user_id = '';
 }
 
@@ -25,6 +25,7 @@ $total_bookmarked = $select_bookmark->rowCount();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,34 +39,35 @@ $total_bookmarked = $select_bookmark->rowCount();
    <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 <body>
 
-<?php include 'components/home_header.php'; ?>
+   <?php include 'components/home_header.php'; ?>
 
-<!-- quick select section starts  -->
+   <!-- quick select section starts  -->
 
-<section class="quick-select">
+   <section class="quick-select">
 
-<h1 class="heading">quick options</h1>
+      <h1 class="heading">quick options</h1>
 
-<div class="box-container">
+      <div class="box-container">
 
-   <div class="box">
-      <div class="flex">
-      <h3 class="title">Quick Grade your Examinations...</h3>
-      <p>Welcome to our Online Paper Marking System, where grading becomes a breeze! At AssessChecker, 
-         we've crafted a user-friendly platform that simplifies the evaluation process for educators and 
-         students alike. With automated grading, customizable rubrics, and real-time analytics, our system 
-         ensures efficiency without compromising precision. Security and confidentiality are paramount, 
-         guaranteeing the protection of student data. Embrace collaboration with our intuitive interface, 
-         fostering a seamless exchange of feedback. Whether you're a small institution or a large university, 
-         our scalable and innovative system adapts to your grading needs. Join us in shaping the future of 
-         assessment – sign up today for a smarter, more efficient approach to paper marking!</p>      
-      </div>
-      <a href="register.php" class="inline-btn">Sign Up</a>
-   </div>
+         <div class="box">
+            <div class="flex">
+               <h3 class="title">Quick Grade your Examinations...</h3>
+               <p>Welcome to our Online Paper Marking System, where grading becomes a breeze! At AssessChecker,
+                  we've crafted a user-friendly platform that simplifies the evaluation process for educators and
+                  students alike. With automated grading, customizable rubrics, and real-time analytics, our system
+                  ensures efficiency without compromising precision. Security and confidentiality are paramount,
+                  guaranteeing the protection of student data. Embrace collaboration with our intuitive interface,
+                  fostering a seamless exchange of feedback. Whether you're a small institution or a large university,
+                  our scalable and innovative system adapts to your grading needs. Join us in shaping the future of
+                  assessment – sign up today for a smarter, more efficient approach to paper marking!</p>
+            </div>
+            <a href="register.php" class="inline-btn">Sign Up</a>
+         </div>
 
-   <!-- <div class="box tutor">
+         <!-- <div class="box tutor">
       <h3 class="title">Become a Tutor</h3>
       <p>If you become a tuter please sign in as a admin.</p>
       <a href="admin/register.php" class="inline-btn">get started</a>
@@ -74,30 +76,20 @@ $total_bookmarked = $select_bookmark->rowCount();
 </div> -->
 
 
-</section>
-<!-- <div class="index-image">
+   </section>
+   <!-- <div class="index-image">
       <img src="images/Education.jpg" alt="">
    </div> -->
 
-<!-- courses section ends -->
+   <!-- courses section ends -->
 
+   <!-- footer section starts  -->
+   <?php include 'components/footer.php'; ?>
+   <!-- footer section ends -->
 
+   <!-- custom js file link  -->
+   <script src="js/script.js"></script>
 
-
-
-
-
-
-
-
-
-
-<!-- footer section starts  -->
-<?php include 'components/footer.php'; ?>
-<!-- footer section ends -->
-
-<!-- custom js file link  -->
-<script src="js/script.js"></script>
-   
 </body>
+
 </html>

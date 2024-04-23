@@ -2,13 +2,13 @@
 
 include 'components/connect.php';
 
-if(isset($_COOKIE['user_id'])){
+if (isset($_COOKIE['user_id'])) {
    $user_id = $_COOKIE['user_id'];
-}else{
+} else {
    $user_id = '';
 }
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
    $email = $_POST['email'];
    $email = filter_var($email, FILTER_SANITIZE_STRING);
@@ -18,9 +18,9 @@ if(isset($_POST['submit'])){
    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ? LIMIT 1");
    $select_user->execute([$email, $pass]);
    $row = $select_user->fetch(PDO::FETCH_ASSOC);
-   
-   if($select_user->rowCount() > 0){
-      setcookie('user_id', $row['id'], time() + 60*60*24*30, '/');
+
+   if ($select_user->rowCount() > 0) {
+      setcookie('user_id', $row['id'], time() + 60 * 60 * 24 * 30, '/');
 
       // Check the account type and redirect accordingly
       if ($row['account_type'] == 'admin') {
@@ -28,7 +28,7 @@ if(isset($_POST['submit'])){
       } else {
          header('location: home.php');
       }
-   }else{
+   } else {
       $message[] = 'Incorrect email or password!';
    }
 
@@ -38,6 +38,7 @@ if(isset($_POST['submit'])){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -51,50 +52,42 @@ if(isset($_POST['submit'])){
    <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 <body>
 
-<?php include 'components/home_header.php'; ?>
+   <?php include 'components/home_header.php'; ?>
 
-<section class="form-container">
+   <section class="form-container">
 
-   <form action="" method="post" enctype="multipart/form-data" class="login">
-      <h3>welcome back!</h3>
-      <?php
-      if(isset($message)){
-      foreach($message as $message){
-         echo '
+      <form action="" method="post" enctype="multipart/form-data" class="login">
+         <h3>welcome back!</h3>
+         <?php
+         if (isset($message)) {
+            foreach ($message as $message) {
+               echo '
          <div class="message form">
-            <span>'.$message.'</span>
+            <span>' . $message . '</span>
          </div>
             ';
-          }
+            }
          }
-      ?>
-      <p>your email <span>*</span></p>
-      <input type="email" name="email" placeholder="enter your email" maxlength="50" required class="box">
-      <p>your password <span>*</span></p>
-      <input type="password" name="pass" placeholder="enter your password" maxlength="20" required class="box">
-      <p class="link">don't have an account? <a href="register.php">register now</a></p>
-      <input type="submit" name="submit" value="login now" class="btn">
-   </form>
+         ?>
+         <p>your email <span>*</span></p>
+         <input type="email" name="email" placeholder="enter your email" maxlength="50" required class="box">
+         <p>your password <span>*</span></p>
+         <input type="password" name="pass" placeholder="enter your password" maxlength="20" required class="box">
+         <p class="link">don't have an account? <a href="register.php">register now</a></p>
+         <input type="submit" name="submit" value="login now" class="btn">
+      </form>
 
-</section>
-
-
+   </section>
 
 
+   <?php include 'components/footer.php'; ?>
 
+   <!-- custom js file link  -->
+   <script src="js/script.js"></script>
 
-
-
-
-
-
-
-<?php include 'components/footer.php'; ?>
-
-<!-- custom js file link  -->
-<script src="js/script.js"></script>
-   
 </body>
+
 </html>
