@@ -19,6 +19,24 @@ if (isset($_GET['exam_id'])) {
 
 ?>
 
+<?php
+$stmtInstructorQuestions = $conn->prepare("SELECT question,answer FROM question_papers");
+$stmtInstructorQuestions->execute();
+$instructorQuestions = $stmtInstructorQuestions->fetchAll(PDO::FETCH_ASSOC);
+
+function getInstrutorAnswer($question)
+{
+    // log client console
+    global $instructorQuestions;
+    foreach ($instructorQuestions as $instructorQuestion) {
+        if ($instructorQuestion['question'] == $question) {
+            return $instructorQuestion['answer'];
+        }
+    }
+    return "";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -155,6 +173,11 @@ if (isset($_GET['exam_id'])) {
                     echo "<p class='paper-heading'>Your Answer:</p>";
                     $answer = isset($paper['answer']) ? $paper['answer'] : "Not answered yet";
                     echo "<textarea class='paper-text' readonly>{$answer}</textarea>";
+                    echo "</div>";
+
+                    echo "<div class='answer'>";
+                    echo "<p class='paper-heading'>Instructor Answer:</p>";
+                    echo "<textarea class='paper-text' readonly>" . getInstrutorAnswer($paper['question']) . "</textarea>";
                     echo "</div>";
 
                     echo "</div>"; // Closing div for question-answer
